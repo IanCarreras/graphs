@@ -101,29 +101,46 @@ class Graph:
         """
         # create an empty queue and enqueue the path to starting vertex
         q = Queue()
-        q.enqueue(starting_vertex)
         # create an empty set to track visited verticies
-        s = set()
+        visited = set()
+        q.enqueue({
+            'current_vertex': starting_vertex,
+            'path': [starting_vertex]
+        })
 
         # while the queue is not empty
-        # while q.size > 0:
+        while q.size() > 0:
             # get current vertex path, dequeue from queue
-
+            current_obj = q.dequeue()
             # set current vertex to the last element of the path
+            current_path = current_obj['path']
+            current_vertex = current_obj['current_vertex']
 
             # check if the current vertex has not been visited
+            if current_vertex not in visited:
 
                 # check if current vertex is destination
+                if current_vertex is destination_vertex:
                     # if yes stop and return
+                    return current_path
 
                 # mark current vertex as visited
-                    # add current vertex to visited set
+                visited.add(current_vertex)
 
                 # queue up new paths with each neighbor
+                neighbors = self.get_neighbors(current_vertex)
+                for n in neighbors:
                     # take current path
                     # append neighbor
-                    # queue up new path 
-        pass  # TODO
+                    # queue up new path
+                    new_path = list(current_path)
+                    new_path.append(n)
+                
+                q.enqueue({
+                    'current_vertex': n,
+                    'path': new_path
+                }) 
+        return None
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -131,7 +148,32 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        stack = Stack()
+        visited = set()
+        stack.push({
+            'current_vertex': starting_vertex,
+            'path': [starting_vertex]
+        })
+
+        while stack.size() > 0:
+            current_obj = stack.pop()
+            current_path = current_obj['path']
+            current_vertex = current_obj['current_vertex']
+
+            if current_vertex not in visited:
+                if current_vertex == destination_vertex:
+                    return current_path
+
+                visited.add(current_vertex)
+
+                for n in self.get_neighbors(current_vertex):
+                    new_path = list(current_path)
+                    new_path.append(n)
+                    stack.push({
+                        'current_vertex': n,
+                        'path': new_path
+                    })
+        return None
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
         """
