@@ -14,8 +14,8 @@ world = World()
 
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
-map_file = "maps/test_cross.txt"
-# map_file = "maps/test_loop.txt"
+# map_file = "maps/test_cross.txt"
+map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
 # map_file = "maps/main_maze.txt"
 
@@ -53,14 +53,15 @@ def dft(current_room, graph, visited):
         next_dir = None
         for dir in exits:
             print('\n')
-            print(f'dir: {dir}')
+            print(f'55 dir: {dir}')
             print(f'graph: {graph}')
+            print(f'58 {graph[current_room]}: {visited}')
             if graph[current_room][dir] not in visited:
                 next_dir = dir
                 break
                 
         player.travel(next_dir)
-        print(f'player moves: {dir}')
+        print(f'player moves: {next_dir}')
         traversal_path.append(next_dir)
         current_room = player.current_room.id
         print(f'line 74 current_room: {current_room}')
@@ -151,48 +152,38 @@ def traverse_world():
 
     current_room = player.current_room.id
 
-    status = dft(current_room, graph, visited)
-    print(f'status: {status}')
+    # while len(visited) != len(graph):
 
+    #     status = dft(current_room, graph, visited)
+    #     result = bfs(status[0], status[2], status[1])
+
+    #     for dir in result:
+    #         player.travel(dir)
+    #     traversal_path.extend(result)
+    #     print(f'traversal_path: {traversal_path}')
+
+    status = dft(player.current_room.id, graph, visited)
     result = bfs(status[0], status[2], status[1])
-    print(f'\nresult: {result}')
 
     for dir in result:
         player.travel(dir)
     traversal_path.extend(result)
-    print(f'traversal_path: {traversal_path}')
 
-    print('\n')
-    print(f'line 151 current_room: {player.current_room.id}')
+    status = dft(player.current_room.id, graph, visited)
+    result = bfs(status[0], status[2], status[1])
+
+    for dir in result:
+        player.travel(dir)
+    traversal_path.extend(result)
 
     status = dft(player.current_room.id, graph, visited)
 
-    result = bfs(status[0], status[2], status[1])
-
-    for dir in result:
-        player.travel(dir)
-    traversal_path.extend(result)
-    print(f'\ntraversal_path: {traversal_path}')
-
-    status = dft(player.current_room.id, graph, visited)
-
-    result = bfs(status[0], status[2], status[1])
-
-    for dir in result:
-        player.travel(dir)
-    traversal_path.extend(result)
-    
-    status = dft(player.current_room.id, graph, visited)
-
-    result = bfs(status[0], status[2], status[1])
-
-    for dir in result:
-        player.travel(dir)
-    traversal_path.extend(result)
+    print(f'test {len(visited)} : {len(graph)}: {visited}, {graph}')
 
 
 
 traverse_world()
+print(f'traversal_path: {traversal_path}')
 
 # TRAVERSAL TEST
 visited_rooms = set()
