@@ -47,6 +47,8 @@ def dft(current_room, graph, visited):
     print(f'exits: {exits}')
     for exit in exits:
         graph[current_room][exit] = player.current_room.get_room_in_direction(exit).id
+        print(f'exit: {exit}')
+        print(f'graph[current_room]: {graph[current_room]}')
 
     while len(exits) > 1:
         print(f'\ncurrent_room: {current_room}')
@@ -56,10 +58,19 @@ def dft(current_room, graph, visited):
             print(f'55 dir: {dir}')
             print(f'graph: {graph}')
             print(f'58 {graph[current_room]}: {visited}')
+            # if graph[current_room][dir] in visited:
+            #     result = bfs(graph, visited, current_room)
+            #     for dir in result:
+            #         player.travel(dir)
+            #         traversal_path.extend(result)
+            #     break
             if graph[current_room][dir] not in visited:
                 next_dir = dir
                 break
-                
+        
+        if next_dir is None:
+            break
+
         player.travel(next_dir)
         print(f'player moves: {next_dir}')
         traversal_path.append(next_dir)
@@ -119,6 +130,13 @@ def bfs(graph, current_room, world_visited):
                 print(f'path: {path}')
                 print(f'line 106 {current_room} neighbors: {graph[current_room]}')
             elif len(neighbors_values) > 1:
+                # new_neighbors = []
+                # for n in neighbors_values:
+                #     if n in world_visited:
+                #         new_neighbors.extend(list(graph[n].values()))
+                # print(f'138 {new_neighbors}')
+                # neighbors_values.extend(new_neighbors)
+
                 for n in neighbors_values:
                     if n not in visited:
                         print(f'n: {n}')
@@ -127,6 +145,21 @@ def bfs(graph, current_room, world_visited):
                         print(f'path: {path}')
                         new_room = n
                         return path
+                    elif n not in visited and n in world_visited:
+                        print(f'142 {neighbors}')
+                        new_neighbors = []
+                        for n in neighbors_values:
+                            print(f'144 {list(graph[n].values())}')
+                            new_neighbors.extend(list(graph[n].values()))
+                            print(f'146 {new_neighbors}')
+                        # for n in new_neighbors:
+                        #     if n not in visited:
+                        #         print(f'n: {n}')
+                        #         index = neighbors_values.index(n)
+                        #         path.append(neighbors_keys[index])
+                        #         print(f'path: {path}')
+                        #         new_room = n
+                        #     return path
 
             for n in neighbors:
                 new_path = list(current_path)
@@ -152,31 +185,33 @@ def traverse_world():
 
     current_room = player.current_room.id
 
-    # while len(visited) != len(graph):
+    i = 0
+    while i < 5:
 
-    #     status = dft(current_room, graph, visited)
-    #     result = bfs(status[0], status[2], status[1])
+        status = dft(current_room, graph, visited)
+        result = bfs(status[0], status[2], status[1])
 
-    #     for dir in result:
-    #         player.travel(dir)
-    #     traversal_path.extend(result)
-    #     print(f'traversal_path: {traversal_path}')
+        for dir in result:
+            player.travel(dir)
+        traversal_path.extend(result)
+        print(f'traversal_path: {traversal_path}')
+        i += 1
 
-    status = dft(player.current_room.id, graph, visited)
-    result = bfs(status[0], status[2], status[1])
+    # status = dft(player.current_room.id, graph, visited)
+    # result = bfs(status[0], status[2], status[1])
 
-    for dir in result:
-        player.travel(dir)
-    traversal_path.extend(result)
+    # for dir in result:
+    #     player.travel(dir)
+    # traversal_path.extend(result)
 
-    status = dft(player.current_room.id, graph, visited)
-    result = bfs(status[0], status[2], status[1])
+    # status = dft(player.current_room.id, graph, visited)
+    # result = bfs(status[0], status[2], status[1])
 
-    for dir in result:
-        player.travel(dir)
-    traversal_path.extend(result)
+    # for dir in result:
+    #     player.travel(dir)
+    # traversal_path.extend(result)
 
-    status = dft(player.current_room.id, graph, visited)
+    # status = dft(player.current_room.id, graph, visited)
 
     print(f'test {len(visited)} : {len(graph)}: {visited}, {graph}')
 
